@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model addresswifi {
+  id       Int    @id(map: "addressWifi_pk") @default(autoincrement())
+  userId   Int
+  tagTitle String
+  name     String
+  password String
+  users    users  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "addressWifi_fk0")
+}
+
+model cards {
+  id             Int      @id(map: "cards_pk") @default(autoincrement())
+  userId         Int
+  tagTitle       String
+  cardNumber     String
+  cardName       String
+  cardCVV        String
+  dateExpiration DateTime @db.Timestamp(6)
+  password       String
+  isVirtual      Boolean
+  type           String
+  users          users    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cards_fk0")
+}
+
+model credentyals {
+  id       Int    @id(map: "credentyals_pk") @default(autoincrement())
+  userId   Int
+  title String
+  userName String
+  password String
+  url      String
+  name     String
+  label    String
+  users    users  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "credentyals_fk0")
+}
+
+model notes {
+  id       Int    @id(map: "notes_pk") @default(autoincrement())
+  userId   Int
+  tagTitle String
+  content  String
+  users    users  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "notes_fk0")
+}
+
+model users {
+  id          Int           @id(map: "users_pk") @default(autoincrement())
+  name        String
+  password    String
+  email       String @unique
+  addresswifi addresswifi[]
+  cards       cards[]
+  credentyals credentyals[]
+  notes       notes[]
+}
+
+
+ 

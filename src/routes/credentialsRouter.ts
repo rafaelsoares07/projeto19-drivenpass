@@ -15,5 +15,17 @@ router.post(
     credentialsController.createCredentials
 )
 
+router.get(
+    "/find/credential/:id",
+    tokenValidation,
+    credentialsController.findCredentialWithUserId
+)
+
+router.delete(
+    "/delete/credential/:id",
+    tokenValidation,
+    credentialsController.deleteCredentialWithUserId
+)
+
 
 export default router

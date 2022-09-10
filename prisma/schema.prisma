@@ -12,6 +12,7 @@ model addresswifi {
   userId   Int
   tagTitle String
   name     String
+  label    String
   password String
   users    users  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "addressWifi_fk0")
 }

@@ -14,5 +14,5 @@ export async function loginUser(req:Request , res:Response) {
     
     const resul = await authService.loginUsuario(req.body)
 
-    res.status(200).send("Login feito com sucesso")
+    res.status(200).send(resul)
 }

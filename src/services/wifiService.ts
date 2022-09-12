@@ -63,5 +63,12 @@ export async function findAllWifis(idUser:number){
         throw {type:"bad_request", message:"Você não tem nenhuma"}
     }
 
+    
+    const cryptr = new Cryptr("senhasenha");
+    const wifisValid  = wifis.map(el=>{
+        el.password = cryptr.decrypt(el.password)
+        return el
+    })
+
     return wifis
 }

@@ -57,11 +57,6 @@ export async function findByIdCredential(idCredential:number,UserId:number) {
     const cryptr = new Cryptr("senhasenha");
     const passwordDecrip = cryptr.decrypt(passwordE)
 
-    console.log(passwordDecrip)
-
-
-    
-    
 
     const validCredential = {
         url:credential.url,
@@ -100,6 +95,13 @@ export async function findAllCredentials(UserId:number) {
         throw {type:"bad_request", message:"Você não tem nenhuma credencial registrada"}
     }
 
-    return credentials
+    const cryptr = new Cryptr("senhasenha");
+    const credentialsValid= credentials.map(el=>{
+        el.password = cryptr.decrypt(el.password)
+        return el
+    })
+    
+
+    return credentialsValid
 
 }

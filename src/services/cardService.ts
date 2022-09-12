@@ -8,9 +8,6 @@ import * as cardRepository from "../repository/cardRepository";
 
 export async function createCard(card:any, UserId:number){
 
-    console.log(card)
-   
-
     const findDuplicateTitle = await cardRepository.findDuplicateByTitle(card.title,UserId)
     if(findDuplicateTitle){
         throw {type:"bad_request" , message:"Você já cadastrou um card com esse com mesmo titulo"}
@@ -18,8 +15,7 @@ export async function createCard(card:any, UserId:number){
 
     const cryptr = new Cryptr("senhasenha");
     const passwordEncrip = cryptr.encrypt(card.password)
-
-    console.log(passwordEncrip)
+    const cvvEncrip = cryptr.encrypt(card.cardCVV)
 
     const expirationDate = dayjs().add(5, 'year').format('MM/YY');
 
@@ -28,17 +24,14 @@ export async function createCard(card:any, UserId:number){
         tagTitle:card.title,
         cardNumber:card.cardNumber,
         cardName:card.cardName,
-        cardCVV:card.cardCVV,
+        cardCVV:cvvEncrip,
         dateExpiration:expirationDate,
         password:passwordEncrip,
         isVirtual:card.isVirtual,
         type:card.type
     }
-    console.log("--------")
-    console.log(validcard)
 
     const resul = await cardRepository.insertNewCard(validcard,UserId)
-
 
     return resul
     
@@ -56,21 +49,17 @@ export async function findByIdCard(idCard:number,UserId:number) {
         throw {type:"bad_request", message:"Card existe, mas você não ta autorizado"}
     }
 
-
-    const passwordE= card.password
+    //const passwordE= card.password
     const cryptr = new Cryptr("senhasenha");
-    const passwordDecrip = cryptr.decrypt(passwordE)
-
-    console.log(passwordDecrip)
-    
-
+    const passwordDecrip = cryptr.decrypt(card.password)
+    const cvvCard = cryptr.decrypt(card.cardCVV)
 
     const validcard = {
         userId:UserId,
         tagTitle:card.tagTitle,
         cardNumber:card.cardNumber,
         cardName:card.cardName,
-        cardCVV:card.cardCVV,
+        cardCVV:cvvCard,
         dateExpiration:card.dateExpiration,
         password:passwordDecrip,
         isVirtual:card.isVirtual,
@@ -103,5 +92,12 @@ export async function findAllCards(idUser:number){
         throw {type:"bad_request", message:"Você não tem nenhuma"}
     }
 
-    return cards
+    const cryptr = new Cryptr("senhasenha");
+    const cardValid= cards.map(el=>{
+        el.password = cryptr.decrypt(el.password)
+        el.cardCVV = cryptr.decrypt(el.cardCVV)
+        return el
+    })
+
+    return cardValid
 }

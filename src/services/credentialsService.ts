@@ -9,7 +9,7 @@ import { ICreateCredential } from "../types/CredentialsTypes"
 
 export async function createCredential(credential:ICreateCredential, UserId:number){
 
-    console.log(credential)
+    
     const {userName,url,label,name,title,password} = credential
 
     const findDuplicateTitle = await findDuplicateByTitle(title,UserId)
@@ -19,8 +19,6 @@ export async function createCredential(credential:ICreateCredential, UserId:numb
 
     const cryptr = new Cryptr("senhasenha");
     const passwordEncrip = cryptr.encrypt(password)
-
-    console.log(passwordEncrip)
 
     const validCredential = {
         url,
@@ -32,7 +30,6 @@ export async function createCredential(credential:ICreateCredential, UserId:numb
     }
 
     const resul = await insertNewCredential(validCredential,UserId)
-
 
     return resul
     
@@ -50,8 +47,6 @@ export async function findByIdCredential(idCredential:number,UserId:number) {
     if(credential.userId!=UserId){
         throw {type:"bad_request", message:"Credencial existe, mas você não tá autorizado"}
     }
-
-    //const resul= await findCredentialById(idCredential,UserId)
 
     const passwordE= credential.password
     const cryptr = new Cryptr("senhasenha");
@@ -90,6 +85,7 @@ export async function deleteCredentialById(idCredential:number,UserId:number) {
 
 
 export async function findAllCredentials(UserId:number) {
+    
     const credentials = await getAllCredentials(UserId)
     if(!credentials){
         throw {type:"bad_request", message:"Você não tem nenhuma credencial registrada"}

@@ -19,11 +19,11 @@ export async function findByIdNotes(noteId:number, userId:number) {
 
     const note = await noteRepository.noteExist(noteId)
     if(!note){
-        throw {type:"bad_request", message:"Note com esse id não existe"}
+        throw {type:"bad_request", message:"Nota com esse id não existe"}
     }
 
     if(note.userId!=userId){
-        throw {type:"bad_request", message:"Note existe, mas voce nao ta autorizado a ver"}
+        throw {type:"bad_request", message:"Nota existe, mas você não tá autorizado a ver"}
     }
 
     return note
@@ -35,14 +35,23 @@ export async function deleteNoteById(idNote:number,UserId:number) {
 
     const note = await noteRepository.noteExist(idNote)
     if(!note){
-        throw {type:"bad_request", message:"Note no exist"}
+        throw {type:"bad_request", message:"Nota não existe"}
     }
 
     if(note.userId!=UserId){
-        throw {type:"bad_request", message:"Note no exist"}
+        throw {type:"bad_request", message:"Nota existe, mas você não tá autorizado a deletar"}
     }
 
     const resul = await noteRepository.deleteNote(Number(idNote))
 
     return resul
+}
+
+export async function findAllNotes(idUser:number){
+    const notes = await noteRepository.getAllNotes(idUser)
+    if(!notes){
+        throw {type:"bad_request", message:"Você não tem nenhuma"}
+    }
+
+    return notes
 }

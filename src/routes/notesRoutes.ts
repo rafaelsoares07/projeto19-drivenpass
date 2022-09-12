@@ -27,6 +27,11 @@ router.delete(
     notesController.deleteNotesWithUserId
     )
 
+router.get(
+    "/findAll/notes",
+    tokenValidation,
+    notesController.findAllNotes
+)
 
 
 export default router

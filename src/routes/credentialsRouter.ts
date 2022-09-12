@@ -28,4 +28,10 @@ router.delete(
 )
 
 
+router.get(
+    "/findAll/credentials",
+    tokenValidation,
+    credentialsController.findAllCredentials
+)
+
 export default router

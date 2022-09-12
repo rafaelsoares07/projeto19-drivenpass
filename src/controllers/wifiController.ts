@@ -32,3 +32,12 @@ export async function deleteWifiWithUserId(req:Request, res:Response) {
 
     res.status(200).send(resul)
 }
+
+
+export async function findAllWifis(req:Request, res:Response) {
+    const userId = res.locals.token
+
+    const resul = await wifiService.findAllWifis(Number(userId))
+
+    res.status(201).send(resul)
+}

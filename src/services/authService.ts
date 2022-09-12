@@ -1,7 +1,8 @@
 //Pacotes Diversos
-import { prisma } from "@prisma/client";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
+dotenv.config()
 
 //Repository
 import {createUser, findUser} from "../repository/authRepository";
@@ -18,7 +19,7 @@ export async function createUsuario(user:IUserCreate) {
     const userExist = await findUser(user.email)
 
     if(userExist){
-        throw {type:"bad_request", message:"usuario já tem um cadastro"}
+        throw {type:"bad_request", message:"Email está inposibilidado de criar um login, entre em contato"}
     }
 
     if(user.password.length<10){
@@ -48,12 +49,14 @@ export async function loginUsuario(user:IUserLogin) {
     const passwordValid = bcrypt.compareSync(password, userExist.password)
     console.log(passwordValid)
     if(!passwordValid){
-        throw {type:"bad_request", message:"Senha informada está incorreta"}
+        throw {type:"bad_request", message:"Senha informada está incorreta ou usuario não existe"}
     }
-
+    
+    
+    const KEY:string = process.env.JWT_SECRET||"secret"
 
     const id = (userExist.id.toString())
-    const token = jwt.sign(id,"secret")
+    const token = jwt.sign(id,KEY)
 
     return token
 }

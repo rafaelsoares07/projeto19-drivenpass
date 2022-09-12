@@ -44,3 +44,10 @@ export async function deleteWifi(wifiId:number) {
     const resul = await prisma.addresswifi.delete({where:{id:wifiId}})
     return resul
 }
+
+export async function getAllWifis(idUser:number) {
+    const result = await prisma.addresswifi.findMany({where: {userId:idUser}})
+
+    console.log(result)
+    return result
+}

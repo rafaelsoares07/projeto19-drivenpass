@@ -36,3 +36,10 @@ export async function deleteNote(noteId:number) {
     const resul = await prisma.notes.delete({where:{id:noteId}})
     return resul
 }
+
+export async function getAllNotes(idUser:number) {
+    const result = await prisma.notes.findMany({where: {userId:idUser}})
+
+    console.log(result)
+    return result
+}

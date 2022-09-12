@@ -26,15 +26,6 @@ export async function insertNewCredential(credential:ICreateCredential,userId:nu
 
 }
 
-// export async function findCredentialById(idCredential:number, userId:number){
-
-//     const result = await prisma.credentyals.findFirst({where: {id:idCredential, userId:userId}})
-
-//     console.log('----------')
-//     console.log(result)
-//     return result
-// }
-
 export async function credentialExist(idCredential:number){
 
     const result = await prisma.credentyals.findFirst({where: {id:idCredential}})
@@ -46,6 +37,13 @@ export async function credentialExist(idCredential:number){
 export async function deleteCredentialWithIdR(idCredential:number){
 
     const result = await prisma.credentyals.delete({where:{id:idCredential}})
+
+    console.log(result)
+    return result
+}
+
+export async function getAllCredentials(idUser:number) {
+    const result = await prisma.credentyals.findMany({where: {userId:idUser}})
 
     console.log(result)
     return result

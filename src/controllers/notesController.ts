@@ -40,3 +40,12 @@ export async function deleteNotesWithUserId(req:Request, res:Response) {
 
     res.status(200).send("deletado com sucesso")
 } 
+
+
+export async function findAllNotes(req:Request, res:Response) {
+    const userId = res.locals.token
+
+    const resul = await noteServices.findAllNotes(Number(userId))
+
+    res.status(201).send(resul)
+}

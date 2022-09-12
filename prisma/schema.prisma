@@ -24,7 +24,7 @@ model cards {
   cardNumber     String
   cardName       String
   cardCVV        String
-  dateExpiration DateTime @db.Timestamp(6)
+  dateExpiration String
   password       String
   isVirtual      Boolean
   type           String

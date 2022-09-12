@@ -27,6 +27,10 @@ router.delete(
     wifiController.deleteWifiWithUserId
 )
 
-
+router.get(
+    "/findAll/wifis",
+    tokenValidation,
+    wifiController.findAllWifis
+)
 
 export default router

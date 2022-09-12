@@ -1,9 +1,7 @@
 import Cryptr from "cryptr";
-import { number } from "joi";
-import { deleteCredentialWithUserId } from "../controllers/credentialsController";
 
 //Repository
-import { findDuplicateByTitle, insertNewCredential, credentialExist,deleteCredentialWithIdR } from "../repository/credentialRepository";
+import { findDuplicateByTitle, insertNewCredential, credentialExist,deleteCredentialWithIdR, getAllCredentials } from "../repository/credentialRepository";
 
 //Tipagem TypeScript 
 import { ICreateCredential } from "../types/CredentialsTypes"
@@ -16,7 +14,7 @@ export async function createCredential(credential:ICreateCredential, UserId:numb
 
     const findDuplicateTitle = await findDuplicateByTitle(title,UserId)
     if(findDuplicateTitle){
-        throw {type:"bad_request" , message:"voce ja cadastrou outra com mesmo titulo"}
+        throw {type:"bad_request" , message:"Você já cadastrou outra com mesmo titulo"}
     }
 
     const cryptr = new Cryptr("senhasenha");
@@ -50,7 +48,7 @@ export async function findByIdCredential(idCredential:number,UserId:number) {
     }
 
     if(credential.userId!=UserId){
-        throw {type:"bad_request", message:"Credencial existe, mas voce nao ta autorizado a ver"}
+        throw {type:"bad_request", message:"Credencial existe, mas você não tá autorizado"}
     }
 
     //const resul= await findCredentialById(idCredential,UserId)
@@ -83,14 +81,25 @@ export async function deleteCredentialById(idCredential:number,UserId:number) {
 
     const credential = await credentialExist(idCredential)
     if(!credential){
-        throw {type:"bad_request", message:"Credencial com esse id não existe PARA SER APAGADAddd"}
+        throw {type:"bad_request", message:"Credencial com esse id não existe para se deletada"}
     }
 
     if(credential.userId!=UserId){
-        throw {type:"bad_request", message:"Credencial existe, mas voce nao ta autorizado a deletar"}
+        throw {type:"bad_request", message:"Credencial existe, mas você não tá autorizado a deletar"}
     }
 
     const resul:object = await deleteCredentialWithIdR(idCredential)
 
     return resul
+}
+
+
+export async function findAllCredentials(UserId:number) {
+    const credentials = await getAllCredentials(UserId)
+    if(!credentials){
+        throw {type:"bad_request", message:"Você não tem nenhuma credencial registrada"}
+    }
+
+    return credentials
+
 }
